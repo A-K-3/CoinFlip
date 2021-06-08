@@ -1,0 +1,10 @@
+name: CoinFlipGMIP
+version: ${project.version}
+main: gmip.ak.CoinFlip
+api-version: 1.16
+authors: [ Ak ]
+description: Cara o Cruz
+
+commands:
+  coinflip:
+    description: Main command.
