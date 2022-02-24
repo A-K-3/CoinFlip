@@ -1,4 +1,4 @@
-package gmip.ak.utils;
+package gmip.ak.tokenflip.utils;
 
 
 import org.bukkit.ChatColor;

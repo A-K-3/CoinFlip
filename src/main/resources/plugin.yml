@@ -1,10 +1,9 @@
-name: CoinFlipGMIP
+name: TokenFlipGMIP
 version: ${project.version}
-main: gmip.ak.CoinFlip
-api-version: 1.16
+main: gmip.ak.tokenflip.TokenFlip
 authors: [ Ak ]
 description: Cara o Cruz
 
 commands:
-  coinflip:
+  tokenflip:
     description: Main command.

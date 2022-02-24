@@ -1,13 +1,11 @@
-package gmip.ak;
+package gmip.ak.tokenflip.utils;
 
 import org.bukkit.ChatColor;
 
-
-
 public enum Prefix {
 
-    DONE("DONE", 0, ChatColor.translateAlternateColorCodes('&', "&a&lCreativo &8&l>>&7 ")),
-    ERROR("ERROR", 1, ChatColor.translateAlternateColorCodes('&', "&c&lCreativo &8&l>>&7 "));
+    DONE("DONE", 0, ChatColor.translateAlternateColorCodes('&', "&7")),
+    ERROR("ERROR", 1, ChatColor.translateAlternateColorCodes('&', "&c"));
 
     private final String str;
 

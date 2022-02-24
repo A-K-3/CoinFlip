@@ -1,7 +1,7 @@
-package gmip.ak.coinflip;
+package gmip.ak.tokenflip.tokenflip;
 
-import gmip.ak.CoinFlip;
-import gmip.ak.utils.SendCenteredMessage;
+import gmip.ak.tokenflip.TokenFlip;
+import gmip.ak.tokenflip.utils.SendCenteredMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 
 public class Commands implements CommandExecutor {
 
-    public CoinFlip plugin;
+    public TokenFlip plugin;
     SendCenteredMessage sendCenteredMessage = new SendCenteredMessage();
 
-    public Commands(CoinFlip plugin) {
+    public Commands(TokenFlip plugin) {
         this.plugin = plugin;
     }
 
@@ -40,24 +40,26 @@ public class Commands implements CommandExecutor {
                 this.plugin.sendCoinflip.sendCoinflip(sender, args);
             }
             return true;
-        }
+        }else{
 
-        if (label.equalsIgnoreCase("coinflip")) {
-            this.sendCMD(sender);
+            if (label.equalsIgnoreCase("tokenflip")) {
+                this.sendCMD(sender);
+            }
+            return false;
+
         }
-        return false;
     }
 
     private void sendCMD(final CommandSender sender) {
         sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
         final String format = " §f/%s %s §e- %s";
         sender.sendMessage("");
-        sendCenteredMessage.sendCenteredMessage((Player) sender, "&7&lCOINFLIP &2&lG&1&lM&2&lI&1&lP");
+        sendCenteredMessage.sendCenteredMessage((Player) sender, "&7&lTOKENFLIP &2&lG&1&lM&2&lI&1&lP");
         sender.sendMessage("");
-        sender.sendMessage(String.format(format, "coinflip", "§a[usuario] [cantidad]", "envías una petición de coinflip."));
-        sender.sendMessage(String.format(format, "coinflip", "accept §a[usuario]", "aceptas una petición."));
-        sender.sendMessage(String.format(format, "coinflip", "ignore §a[usuario]", "rechazas una petición."));
-        sender.sendMessage(String.format(format, "coinflip", "about", "información sobre el plugin."));
+        sender.sendMessage(String.format(format, "tokenflip", "§a[usuario] [cantidad]", "envías una petición de coinflip."));
+        sender.sendMessage(String.format(format, "tokenflip", "accept §a[usuario]", "aceptas una petición."));
+        sender.sendMessage(String.format(format, "tokenflip", "ignore §a[usuario]", "rechazas una petición."));
+        sender.sendMessage(String.format(format, "tokenflip", "about", "información sobre el plugin."));
 
         sender.sendMessage("");
         sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
