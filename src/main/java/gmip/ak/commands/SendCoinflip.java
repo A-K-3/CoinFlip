@@ -8,6 +8,7 @@ import gmip.ak.coinflip.PlayerInvitation;
 import gmip.ak.utils.CommandUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -88,12 +89,8 @@ public class SendCoinflip {
 
         // Schedule task to remove the invitation after 1 minute
         List<PlayerInvitation> finalInvitations = invitations;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                finalInvitations.remove(newInvitation);
-            }
-        }.runTaskLaterAsynchronously(plugin, 1200); // 1200 ticks = 1 minute
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> finalInvitations.remove(newInvitation), 1200); // 60 seconds
 
         TextComponent accept = new TextComponent(MessageManager.getMessage(Message.ACCEPT));
         accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/coinflip accept " + player.getName()));
