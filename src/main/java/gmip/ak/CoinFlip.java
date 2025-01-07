@@ -32,10 +32,9 @@ public final class CoinFlip extends JavaPlugin implements Listener {
         getServer().getLogger().info("Plugin Coinflip activado correctamente.");
         this.getCommand("coinflip").setExecutor(new Commands(this));
         this.sendCoinflip = new SendCoinflip(this);
-        this.acceptCoinflip= new AcceptCoinflip(this);
+        this.acceptCoinflip = new AcceptCoinflip(this);
         getServer().getPluginManager().registerEvents(this, this);
         setupEconomy();
-
     }
 
     @Override
@@ -57,11 +56,8 @@ public final class CoinFlip extends JavaPlugin implements Listener {
 
 
     @EventHandler
-    public void onLeft(PlayerQuitEvent e){
-
+    public void onLeft(PlayerQuitEvent e) {
         invites.remove(e.getPlayer().getUniqueId());
         games.remove(e.getPlayer().getUniqueId());
-
     }
-
 }

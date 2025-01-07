@@ -27,7 +27,9 @@ public class Commands implements CommandExecutor {
 
                 this.plugin.acceptCoinflip.sendAccept(sender, args);
 
-            }if (st.equalsIgnoreCase("ignore") || st.equalsIgnoreCase("ignorar")) {
+            }
+
+            if (st.equalsIgnoreCase("ignore") || st.equalsIgnoreCase("ignorar")) {
 
                 this.plugin.ignoreCoinflip.ignoreCoinflip(sender, args);
 

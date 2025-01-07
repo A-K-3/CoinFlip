@@ -1,8 +1,5 @@
 package gmip.ak.coinflip;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import java.util.UUID;
 
 public class PlayerInvitation {
@@ -16,20 +13,17 @@ public class PlayerInvitation {
         this.invitador = invitador;
         this.invitado = invitado;
         this.bet = bet;
-
     }
 
     public UUID getInvitado() {
         return invitado;
     }
 
-    public UUID getInvitador() { return invitador;}
-
-    public Integer getBet(){
-
-        return this.bet;
-
-
+    public UUID getInvitador() {
+        return invitador;
     }
 
+    public Integer getBet() {
+        return this.bet;
+    }
 }

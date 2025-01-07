@@ -2,7 +2,6 @@ package gmip.ak.commands;
 
 import gmip.ak.CoinFlip;
 import gmip.ak.Prefix;
-import gmip.ak.coinflip.CreateCoinflip;
 import gmip.ak.coinflip.PlayerInvitation;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SendCoinflip {
@@ -58,14 +56,12 @@ public class SendCoinflip {
 
             player.sendMessage(Prefix.ERROR.getString() + "No tienes §a" + money + " §7para apostar.");
             return;
-
         }
 
         if (plugin.economy.getBalance(invitado) < money) {
 
             player.sendMessage(Prefix.ERROR.getString() + "§c" + invitado.getName() + " §7no tiene §c" + money + " §7para apostar.");
             return;
-
         }
 
         if (plugin.games.contains(invitado.getUniqueId())) {
@@ -83,10 +79,10 @@ public class SendCoinflip {
             invitaciones.add(invitacion);
 
             plugin.invites.put(invitado.getUniqueId(), invitaciones);
+
         } else {
 
             List<PlayerInvitation> invitaciones = plugin.invites.get(invitado.getUniqueId());
-
 
             int i = 0;
             boolean no_encontrado = true;
@@ -94,7 +90,7 @@ public class SendCoinflip {
             while (i < invitaciones.size() && no_encontrado) {
                 PlayerInvitation invi = invitaciones.get(i);
 
-                if (invi.getInvitador().equals(player.getUniqueId()) ) {
+                if (invi.getInvitador().equals(player.getUniqueId())) {
 
                     player.sendMessage(Prefix.ERROR.getString() + "¡Ya has invitado a este usuario!");
                     no_encontrado = false;
@@ -106,13 +102,10 @@ public class SendCoinflip {
 
             invitaciones.add(invitacion);
             plugin.invites.put(invitado.getUniqueId(), invitaciones);
-
         }
-
 
         List<PlayerInvitation> invitaciones = plugin.invites.get(invitado.getUniqueId());
         plugin.invites.put(invitado.getUniqueId(), invitaciones);
-
 
         TextComponent aceptar = new TextComponent("§a§l[ACEPTAR]");
         aceptar.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/coinflip accept " + player.getName()));
@@ -123,7 +116,7 @@ public class SendCoinflip {
         texto_final.addExtra(" §f- ");
         texto_final.addExtra(rechazar);
 
-        invitado.playSound(invitado.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+        invitado.playSound(invitado.getLocation(), Sound.ORB_PICKUP, 1.0f, 1.0f);
         player.sendMessage(Prefix.DONE.getString() + "¡Has enviado una invitaci\u00f3n al jugador §a" + invitado.getName() + "§7 para hacer una apuesta!");
         invitado.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
         invitado.sendMessage("");
@@ -132,7 +125,6 @@ public class SendCoinflip {
         invitado.spigot().sendMessage(texto_final);
         invitado.sendMessage("");
         invitado.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
-
     }
 }
 

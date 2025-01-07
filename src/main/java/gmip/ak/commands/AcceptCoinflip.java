@@ -23,6 +23,7 @@ public class AcceptCoinflip {
             sender.sendMessage("§cNo se puede ejecutar por consola.");
             return;
         }
+
         final Player player = (Player) sender;
         Player sendInvite;
 
@@ -34,17 +35,13 @@ public class AcceptCoinflip {
         }
 
         if (sendInvite == null) {
-
             player.sendMessage(Prefix.ERROR.getString() + "El jugador §c" + args[1] + " §7no está conectado.");
             return;
-
         }
-
 
         if (plugin.invites.containsKey(player.getUniqueId())) {
 
             List<PlayerInvitation> invitaciones = plugin.invites.get(player.getUniqueId());
-
 
             int i = 0;
             boolean no_encontrado = true;
@@ -65,7 +62,6 @@ public class AcceptCoinflip {
 
                 PlayerInvitation invitacion = invitaciones.get(i);
 
-
                 if (invitacion.getInvitador().equals(sendInvite.getUniqueId())) {
                     no_encontrado = false;
                 } else {
@@ -83,26 +79,20 @@ public class AcceptCoinflip {
 
                     player.sendMessage(Prefix.ERROR.getString() + "No tienes §a" + money + " §7para apostar.");
                     return;
-
                 }
 
                 if (plugin.economy.getBalance(sendInvite) < plugin.invites.get(player.getUniqueId()).get(i).getBet()) {
 
                     player.sendMessage(Prefix.ERROR.getString() + "§c" + sendInvite.getName() + " §7no tiene §c" + money + " §7para apostar.");
                     return;
-
                 }
 
                 new CreateCoinflip(player, sendInvite, plugin.invites.get(player.getUniqueId()).get(i).getBet(), plugin);
                 plugin.invites.get(player.getUniqueId()).remove(i);
-
             }
 
         } else {
             player.sendMessage(Prefix.ERROR.getString() + "¡No tienes ninguna invitacion pendiente!");
         }
-
-
-
     }
 }

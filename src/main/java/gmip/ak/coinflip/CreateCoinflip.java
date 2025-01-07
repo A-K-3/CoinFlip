@@ -2,7 +2,6 @@ package gmip.ak.coinflip;
 
 import gmip.ak.CoinFlip;
 import gmip.ak.Prefix;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -19,11 +18,10 @@ public class CreateCoinflip {
         players.add(player);
         players.add(p);
 
-        for(Player pl : players){
+        for (Player pl : players) {
 
             plugin.games.add(pl.getUniqueId());
             plugin.economy.withdrawPlayer(pl, money);
-
         }
 
 
@@ -35,33 +33,23 @@ public class CreateCoinflip {
             public void run() {
 
                 if (times == 0) {
-
                     sendMessage("Comenzando coinflip entre &a" + player.getName() + "&7 y &a" + p.getName() + "&7 por &a" + money + "&7.", players);
-
                 }
 
                 if (times == 20) {
-
                     sendMessage("3...", players);
-
                 }
 
                 if (times == 40) {
-
                     sendMessage("2...", players);
-
                 }
 
                 if (times == 60) {
-
                     sendMessage("1...", players);
-
                 }
 
                 if (times == 80) {
-
                     sendMessage("Calculando ganador...", players);
-
                 }
 
                 times++;
@@ -70,7 +58,6 @@ public class CreateCoinflip {
 
                     generateCoinflip(players, money, plugin);
                     this.cancel();
-
                 }
             }
         }.runTaskTimerAsynchronously(plugin, 0, 0);
@@ -100,9 +87,8 @@ public class CreateCoinflip {
         plugin.games.remove(winner.getUniqueId());
         plugin.games.remove(loser.getUniqueId());
 
-        winner.playSound(winner.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3.0f, 3.0f);
-        loser.playSound(loser.getLocation(), Sound.ENTITY_ZOMBIE_DEATH, 3.0f, 3.0f);
-
+        winner.playSound(winner.getLocation(), Sound.LEVEL_UP, 3.0f, 3.0f);
+        loser.playSound(loser.getLocation(), Sound.ZOMBIE_DEATH, 3.0f, 3.0f);
 
         plugin.economy.depositPlayer(winner, money * 2);
     }
