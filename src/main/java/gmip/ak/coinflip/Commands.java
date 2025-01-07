@@ -7,6 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Commands implements CommandExecutor {
 
     public CoinFlip plugin;
@@ -20,31 +23,48 @@ public class Commands implements CommandExecutor {
         if (!(sender instanceof Player)) {
             return true;
         }
-        if (args.length > 0) {
-            final String st = args[0];
 
-            if (st.equalsIgnoreCase("accept") || st.equalsIgnoreCase("aceptar")) {
-                this.plugin.acceptCoinflip.sendAccept(sender, args);
-            } else if (st.equalsIgnoreCase("ignore") || st.equalsIgnoreCase("ignorar")) {
-                this.plugin.ignoreCoinflip.ignoreCoinflip(sender, args);
-            } else if (st.equalsIgnoreCase("reload")) {
-                this.plugin.reloadConfig();
-                sender.sendMessage("§aConfiguración recargada.");
-            } else if (st.equalsIgnoreCase("about") || st.equalsIgnoreCase("info-plugin") || st.equalsIgnoreCase("plugin")) {
-                sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
-                sender.sendMessage("§aAuthor: §f[Ak]");
-                sender.sendMessage("§aVersion: §f" + plugin.getDescription().getVersion());
-                sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
+        if (args.length > 0) {
+            final String st = args[0].toLowerCase();
+
+            Map<String, Runnable> commandMap = getStringRunnableMap(sender, args);
+
+            Runnable action = commandMap.get(st);
+            if (action != null) {
+                action.run();
             } else {
                 this.plugin.sendCoinflip.sendCoinflip(sender, args);
             }
+
             return true;
         }
 
         if (label.equalsIgnoreCase("coinflip")) {
             this.sendCMD(sender);
         }
+
         return false;
+    }
+
+    private Map<String, Runnable> getStringRunnableMap(CommandSender sender, String[] args) {
+        Map<String, Runnable> commandMap = new HashMap<>();
+        commandMap.put("accept", () -> this.plugin.acceptCoinflip.sendAccept(sender, args));
+        commandMap.put("ignore", () -> this.plugin.ignoreCoinflip.ignoreCoinflip(sender, args));
+        commandMap.put("reload", () -> {
+            this.plugin.reloadConfig();
+            sender.sendMessage("§aConfiguración recargada.");
+        });
+        commandMap.put("about", () -> sendPluginInfo(sender));
+        commandMap.put("info-plugin", () -> sendPluginInfo(sender));
+        commandMap.put("plugin", () -> sendPluginInfo(sender));
+        return commandMap;
+    }
+
+    private void sendPluginInfo(CommandSender sender) {
+        sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
+        sender.sendMessage("§aAuthor: §f[Ak]");
+        sender.sendMessage("§aVersion: §f" + plugin.getDescription().getVersion());
+        sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
     }
 
     private void sendCMD(final CommandSender sender) {
