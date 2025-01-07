@@ -27,9 +27,12 @@ public class Commands implements CommandExecutor {
                 this.plugin.acceptCoinflip.sendAccept(sender, args);
             } else if (st.equalsIgnoreCase("ignore") || st.equalsIgnoreCase("ignorar")) {
                 this.plugin.ignoreCoinflip.ignoreCoinflip(sender, args);
+            } else if (st.equalsIgnoreCase("reload")) {
+                this.plugin.reloadConfig();
+                sender.sendMessage("§aConfiguración recargada.");
             } else if (st.equalsIgnoreCase("about") || st.equalsIgnoreCase("info-plugin") || st.equalsIgnoreCase("plugin")) {
                 sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
-                sender.sendMessage("§aAuthor: §f[Ak.]");
+                sender.sendMessage("§aAuthor: §f[Ak]");
                 sender.sendMessage("§aVersion: §f" + plugin.getDescription().getVersion());
                 sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
             } else {
@@ -45,7 +48,7 @@ public class Commands implements CommandExecutor {
     }
 
     private void sendCMD(final CommandSender sender) {
-        sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
+        sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
         final String format = " §f/%s %s §e- %s";
         sender.sendMessage("");
         sendCenteredMessage.sendCenteredMessage((Player) sender, "&7&lCOINFLIP");
@@ -56,6 +59,6 @@ public class Commands implements CommandExecutor {
         sender.sendMessage(String.format(format, "coinflip", "about", "información sobre el plugin."));
 
         sender.sendMessage("");
-        sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
+        sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
     }
 }
