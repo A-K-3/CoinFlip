@@ -33,6 +33,7 @@ public class AcceptCoinflip {
             sendInvite = Bukkit.getPlayerExact(args[1]);
         } catch (Exception e) {
             player.sendMessage(MessageManager.getMessage(Message.USAGE_ACCEPT));
+            return;
         }
 
         if (sendInvite == null) {

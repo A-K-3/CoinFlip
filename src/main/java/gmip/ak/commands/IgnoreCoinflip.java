@@ -32,6 +32,7 @@ public class IgnoreCoinflip {
             sendInvite = Bukkit.getPlayerExact(args[1]);
         } catch (Exception e) {
             player.sendMessage(MessageManager.getMessage(Message.USAGE_IGNORE));
+            return;
         }
 
         if (sendInvite == null) {
