@@ -5,6 +5,7 @@ public enum Message {
     NO_CONSOLE("messages.no_console", "§cNo se puede ejecutar por consola."),
     USAGE_IGNORE("messages.usage_ignore", "Uso: /coinflip ignore [usuario]"),
     NO_INVITATION("messages.no_invitation", "Este jugador no te ha invitado!"),
+    INVITATION_EXISTS("messages.invitation_exists", "Ya enviaste una invitación a este jugador."),
     IGNORED_INVITATION("messages.ignored_invitation", "Has ignorado la invitación de %s."),
     IGNORE_INVITATION("messages.ignore_invitation", "%s ha ignorado tu invitación."),
     USAGE_ACCEPT("messages.usage_accept", "Uso: /coinflip accept [usuario]"),

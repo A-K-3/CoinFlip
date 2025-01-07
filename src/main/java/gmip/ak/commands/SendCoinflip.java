@@ -11,9 +11,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SendCoinflip {
@@ -74,10 +74,26 @@ public class SendCoinflip {
         if (invitations == null) {
             invitations = new ArrayList<>();
             plugin.invites.put(target.getUniqueId(), invitations);
+        } else {
+            for (PlayerInvitation invitation : invitations) {
+                if (invitation.getInviter().equals(player.getUniqueId())) {
+                    player.sendMessage(MessageManager.getMessage(Message.INVITATION_EXISTS));
+                    return;
+                }
+            }
         }
 
-        invitations.add(new PlayerInvitation(player.getUniqueId(), target.getUniqueId(), betAmount));
+        PlayerInvitation newInvitation = new PlayerInvitation(player.getUniqueId(), target.getUniqueId(), betAmount);
+        invitations.add(newInvitation);
 
+        // Schedule task to remove the invitation after 1 minute
+        List<PlayerInvitation> finalInvitations = invitations;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                finalInvitations.remove(newInvitation);
+            }
+        }.runTaskLaterAsynchronously(plugin, 1200); // 1200 ticks = 1 minute
 
         TextComponent accept = new TextComponent(MessageManager.getMessage(Message.ACCEPT));
         accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/coinflip accept " + player.getName()));

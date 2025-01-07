@@ -17,6 +17,7 @@ messages:
   coinflip_winner: "El jugador &a%s &7ganó la apuesta contra &a%s &7y consiguió &a%s&7."
   usage_send: "Uso: /coinflip [usuario] [cantidad]"
   player_not_online: "El jugador no está en línea."
+  invitation_exists: "Ya enviaste una invitación a este jugador."
   invalid_amount: "La cantidad debe ser un número."
   accept: "§a§l[ACEPTAR]"
   reject: "§c§l[RECHAZAR]"
