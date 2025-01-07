@@ -1,25 +1,24 @@
-package gmip.ak.tokenflip.commands;
+package gmip.ak.commands;
 
-import com.solodevelopment.tokens.Tokens;
-import gmip.ak.tokenflip.TokenFlip;
-import gmip.ak.tokenflip.tokenflip.CreateCoinflip;
-import gmip.ak.tokenflip.tokenflip.PlayerInvitation;
-import gmip.ak.tokenflip.utils.Prefix;
+import gmip.ak.CoinFlip;
+import gmip.ak.Prefix;
+import gmip.ak.coinflip.CreateCoinflip;
+import gmip.ak.coinflip.PlayerInvitation;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class AcceptCoinflip {
+public class IgnoreCoinflip {
 
-    private final TokenFlip plugin;
+    private final CoinFlip plugin;
 
-    public AcceptCoinflip(final TokenFlip plugin) {
+    public IgnoreCoinflip(final CoinFlip plugin) {
         this.plugin = plugin;
     }
 
-    public void sendAccept(final CommandSender sender, final String[] args) {
+    public void ignoreCoinflip(final CommandSender sender, final String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cNo se puede ejecutar por consola.");
             return;
@@ -28,9 +27,9 @@ public class AcceptCoinflip {
         Player sendInvite;
 
         try {
-            sendInvite = Bukkit.getPlayer(args[1]);
+            sendInvite = Bukkit.getPlayerExact(args[1]);
         } catch (Exception e) {
-            player.sendMessage(Prefix.ERROR.getString() + "Uso: /tokenflip accept [usuario]");
+            player.sendMessage(Prefix.ERROR.getString() + "Uso: /coinflip accept [usuario]");
             return;
         }
 
@@ -80,27 +79,31 @@ public class AcceptCoinflip {
 
                 int money = plugin.invites.get(player.getUniqueId()).get(i).getBet();
 
-                if (Tokens.getInstance().getTokens(player.getUniqueId()) < money) {
+                if (plugin.economy.getBalance(player) < money) {
 
-                    player.sendMessage(Prefix.ERROR.getString() + "No tienes §a" + money + " §7 TOKENS para apostar.");
+                    player.sendMessage(Prefix.ERROR.getString() + "No tienes §a" + money + " §7para apostar.");
                     return;
 
                 }
 
-                if (Tokens.getInstance().getTokens(sendInvite.getUniqueId()) < money) {
+                if (plugin.economy.getBalance(sendInvite) < plugin.invites.get(player.getUniqueId()).get(i).getBet()) {
 
-                    player.sendMessage(Prefix.ERROR.getString() + "§c" + sendInvite.getName() + " §7no tiene §c" + money + " §7TOKENS para apostar.");
+                    player.sendMessage(Prefix.ERROR.getString() + "§c" + sendInvite.getName() + " §7no tiene §c" + money + " §7para apostar.");
                     return;
 
                 }
 
-                new CreateCoinflip(player, sendInvite, plugin.invites.get(player.getUniqueId()).get(i).getBet(), plugin);
-                plugin.invites.remove(player.getUniqueId());
+                sendInvite.sendMessage(Prefix.ERROR.getString() + player.getName() + " ha rechazado tu invitación de apuesta.");
+                plugin.invites.get(player.getUniqueId()).remove(i);
 
             }
 
         } else {
             player.sendMessage(Prefix.ERROR.getString() + "¡No tienes ninguna invitacion pendiente!");
         }
+
+
+
     }
+
 }

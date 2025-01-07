@@ -1,9 +1,9 @@
-package gmip.ak.tokenflip.commands;
+package gmip.ak.commands;
 
-import com.solodevelopment.tokens.Tokens;
-import gmip.ak.tokenflip.TokenFlip;
-import gmip.ak.tokenflip.tokenflip.PlayerInvitation;
-import gmip.ak.tokenflip.utils.Prefix;
+import gmip.ak.CoinFlip;
+import gmip.ak.Prefix;
+import gmip.ak.coinflip.CreateCoinflip;
+import gmip.ak.coinflip.PlayerInvitation;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -12,13 +12,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SendCoinflip {
 
-    private final TokenFlip plugin;
+    private final CoinFlip plugin;
 
-    public SendCoinflip(final TokenFlip plugin) {
+    public SendCoinflip(final CoinFlip plugin) {
         this.plugin = plugin;
     }
 
@@ -35,14 +36,14 @@ public class SendCoinflip {
         try {
             a = args[0];
         } catch (Exception e) {
-            player.sendMessage(Prefix.ERROR.getString() + "Uso: /tokenflip [usuario] [cantidad]");
+            player.sendMessage(Prefix.ERROR.getString() + "Uso: /coinflip [usuario] [cantidad]");
             return;
         }
 
         try {
             money = Integer.parseInt(args[1]);
         } catch (Exception e) {
-            player.sendMessage(Prefix.ERROR.getString() + "Uso: /tokenflip [usuario] [cantidad]");
+            player.sendMessage(Prefix.ERROR.getString() + "Uso: /coinflip [usuario] [cantidad]");
             return;
         }
 
@@ -53,31 +54,16 @@ public class SendCoinflip {
             return;
         }
 
-        if(player.getUniqueId().equals(invitado.getUniqueId())){
+        if (plugin.economy.getBalance(player) < money) {
 
-            player.sendMessage(Prefix.ERROR.getString() + "No puedes apostar contra ti mismo!");
+            player.sendMessage(Prefix.ERROR.getString() + "No tienes §a" + money + " §7para apostar.");
             return;
 
         }
 
+        if (plugin.economy.getBalance(invitado) < money) {
 
-        if (Tokens.getInstance().getTokens(player.getUniqueId()) < money) {
-
-            player.sendMessage(Prefix.ERROR.getString() + "No tienes §a" + money + " §7 tokens para apostar.");
-            return;
-
-        }
-
-        if (Tokens.getInstance().getTokens(invitado.getUniqueId()) < money) {
-
-            player.sendMessage(Prefix.ERROR.getString() + "§c" + invitado.getName() + " §7no tiene §c" + money + " §7 tokens para apostar.");
-            return;
-
-        }
-
-        if (400 > money) {
-
-            player.sendMessage(Prefix.ERROR.getString() +  "§7No puedes apostar tan poco.");
+            player.sendMessage(Prefix.ERROR.getString() + "§c" + invitado.getName() + " §7no tiene §c" + money + " §7para apostar.");
             return;
 
         }
@@ -123,24 +109,25 @@ public class SendCoinflip {
 
         }
 
+
         List<PlayerInvitation> invitaciones = plugin.invites.get(invitado.getUniqueId());
         plugin.invites.put(invitado.getUniqueId(), invitaciones);
 
 
         TextComponent aceptar = new TextComponent("§a§l[ACEPTAR]");
-        aceptar.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tokenflip accept " + player.getName()));
+        aceptar.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/coinflip accept " + player.getName()));
         TextComponent rechazar = new TextComponent("§c§l[RECHAZAR]");
-        rechazar.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tokenflip ignore " + player.getName()));
+        rechazar.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/coinflip ignore " + player.getName()));
 
         TextComponent texto_final = new TextComponent(aceptar);
         texto_final.addExtra(" §f- ");
         texto_final.addExtra(rechazar);
 
-        invitado.playSound(invitado.getLocation(), Sound.ORB_PICKUP, 1.0f, 1.0f);
+        invitado.playSound(invitado.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
         player.sendMessage(Prefix.DONE.getString() + "¡Has enviado una invitaci\u00f3n al jugador §a" + invitado.getName() + "§7 para hacer una apuesta!");
         invitado.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
         invitado.sendMessage("");
-        invitado.sendMessage("§7El jugador §a" + player.getName() + " §7quiere hacerte una apuesta por §a" + money + "§7 &cTOKENS.");
+        invitado.sendMessage("§7El jugador §a" + player.getName() + " §7quiere hacerte una apuesta por §a" + money + "§7.");
         invitado.sendMessage("");
         invitado.spigot().sendMessage(texto_final);
         invitado.sendMessage("");
