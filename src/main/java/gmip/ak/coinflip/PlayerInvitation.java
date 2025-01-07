@@ -3,27 +3,25 @@ package gmip.ak.coinflip;
 import java.util.UUID;
 
 public class PlayerInvitation {
+    private final UUID inviterId;
+    private final UUID inviteeId;
+    private final int betAmount;
 
-    private final UUID invitado;
-    private final UUID invitador;
-    private final Integer bet;
-
-    public PlayerInvitation(UUID invitador, UUID invitado, Integer bet) {
-
-        this.invitador = invitador;
-        this.invitado = invitado;
-        this.bet = bet;
+    public PlayerInvitation(UUID inviterId, UUID inviteeId, int betAmount) {
+        this.inviterId = inviterId;
+        this.inviteeId = inviteeId;
+        this.betAmount = betAmount;
     }
 
-    public UUID getInvitado() {
-        return invitado;
+    public UUID getInviter() {
+        return inviterId;
     }
 
-    public UUID getInvitador() {
-        return invitador;
+    public UUID getInvitee() {
+        return inviteeId;
     }
 
-    public Integer getBet() {
-        return this.bet;
+    public int getBetAmount() {
+        return betAmount;
     }
 }

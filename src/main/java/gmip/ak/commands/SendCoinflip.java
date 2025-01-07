@@ -1,130 +1,101 @@
 package gmip.ak.commands;
 
 import gmip.ak.CoinFlip;
-import gmip.ak.Prefix;
+import gmip.ak.Message;
+import gmip.ak.MessageManager;
+import gmip.ak.coinflip.InvitationManager;
 import gmip.ak.coinflip.PlayerInvitation;
+import gmip.ak.utils.CommandUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SendCoinflip {
 
     private final CoinFlip plugin;
+    private final InvitationManager invitationManager;
 
     public SendCoinflip(final CoinFlip plugin) {
         this.plugin = plugin;
+        this.invitationManager = new InvitationManager(plugin);
     }
 
     public void sendCoinflip(final CommandSender sender, final String[] args) {
 
         if (!(sender instanceof Player)) {
+            sender.sendMessage(MessageManager.getMessage(Message.NO_CONSOLE));
             return;
         }
 
         final Player player = (Player) sender;
+        if (args.length >= 3) {
+            player.sendMessage(MessageManager.getMessage(Message.USAGE_SEND));
+            return;
+        }
 
-        String a;
-        int money;
+        if (player.getName().equals(args[0])) {
+            player.sendMessage(MessageManager.getMessage(Message.SEND_TO_SELF));
+            return;
+        }
+
+        Player target = CommandUtils.getPlayerFromArgs(player, args);
+        if (target == null) {
+            player.sendMessage(MessageManager.getMessage(Message.PLAYER_NOT_ONLINE));
+            return;
+        }
+
+        int betAmount;
         try {
-            a = args[0];
-        } catch (Exception e) {
-            player.sendMessage(Prefix.ERROR.getString() + "Uso: /coinflip [usuario] [cantidad]");
+            betAmount = Integer.parseInt(args[1]);
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            player.sendMessage(MessageManager.getMessage(Message.INVALID_AMOUNT));
             return;
         }
 
-        try {
-            money = Integer.parseInt(args[1]);
-        } catch (Exception e) {
-            player.sendMessage(Prefix.ERROR.getString() + "Uso: /coinflip [usuario] [cantidad]");
+        if (plugin.economy.getBalance(player) < betAmount) {
+            player.sendMessage(MessageManager.getMessage(Message.INSUFFICIENT_FUNDS));
             return;
         }
 
-        Player invitado = Bukkit.getPlayerExact(a);
+        double minBet = plugin.getConfig().getDouble("coinflip.min-bet");
 
-        if (invitado == null) {
-            player.sendMessage(Prefix.ERROR.getString() + "El usuario §c" + a + " §7no está conectado.");
+        if (betAmount < minBet) {
+            player.sendMessage(String.format(MessageManager.getMessage(Message.MIN_BET), minBet));
             return;
         }
 
-        if (plugin.economy.getBalance(player) < money) {
-
-            player.sendMessage(Prefix.ERROR.getString() + "No tienes §a" + money + " §7para apostar.");
-            return;
+        List<PlayerInvitation> invitations = invitationManager.getInvitations(target.getUniqueId());
+        if (invitations == null) {
+            invitations = new ArrayList<>();
+            plugin.invites.put(target.getUniqueId(), invitations);
         }
 
-        if (plugin.economy.getBalance(invitado) < money) {
-
-            player.sendMessage(Prefix.ERROR.getString() + "§c" + invitado.getName() + " §7no tiene §c" + money + " §7para apostar.");
-            return;
-        }
-
-        if (plugin.games.contains(invitado.getUniqueId())) {
-
-            player.sendMessage(Prefix.ERROR.getString() + "§c" + invitado.getName() + " §7ya está en una apuesta.");
-            return;
-        }
+        invitations.add(new PlayerInvitation(player.getUniqueId(), target.getUniqueId(), betAmount));
 
 
-        PlayerInvitation invitacion = new PlayerInvitation(player.getUniqueId(), invitado.getUniqueId(), money);
+        TextComponent accept = new TextComponent(MessageManager.getMessage(Message.ACCEPT));
+        accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/coinflip accept " + player.getName()));
+        TextComponent reject = new TextComponent(MessageManager.getMessage(Message.REJECT));
+        reject.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/coinflip ignore " + player.getName()));
 
-        if (!plugin.invites.containsKey(invitado.getUniqueId())) {
+        TextComponent finalText = new TextComponent(accept);
+        finalText.addExtra(" §f- ");
+        finalText.addExtra(reject);
 
-            List<PlayerInvitation> invitaciones = new ArrayList<>();
-            invitaciones.add(invitacion);
-
-            plugin.invites.put(invitado.getUniqueId(), invitaciones);
-
-        } else {
-
-            List<PlayerInvitation> invitaciones = plugin.invites.get(invitado.getUniqueId());
-
-            int i = 0;
-            boolean no_encontrado = true;
-
-            while (i < invitaciones.size() && no_encontrado) {
-                PlayerInvitation invi = invitaciones.get(i);
-
-                if (invi.getInvitador().equals(player.getUniqueId())) {
-
-                    player.sendMessage(Prefix.ERROR.getString() + "¡Ya has invitado a este usuario!");
-                    no_encontrado = false;
-                    return;
-                } else {
-                    i++;
-                }
-            }
-
-            invitaciones.add(invitacion);
-            plugin.invites.put(invitado.getUniqueId(), invitaciones);
-        }
-
-        List<PlayerInvitation> invitaciones = plugin.invites.get(invitado.getUniqueId());
-        plugin.invites.put(invitado.getUniqueId(), invitaciones);
-
-        TextComponent aceptar = new TextComponent("§a§l[ACEPTAR]");
-        aceptar.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/coinflip accept " + player.getName()));
-        TextComponent rechazar = new TextComponent("§c§l[RECHAZAR]");
-        rechazar.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/coinflip ignore " + player.getName()));
-
-        TextComponent texto_final = new TextComponent(aceptar);
-        texto_final.addExtra(" §f- ");
-        texto_final.addExtra(rechazar);
-
-        invitado.playSound(invitado.getLocation(), Sound.ORB_PICKUP, 1.0f, 1.0f);
-        player.sendMessage(Prefix.DONE.getString() + "¡Has enviado una invitaci\u00f3n al jugador §a" + invitado.getName() + "§7 para hacer una apuesta!");
-        invitado.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
-        invitado.sendMessage("");
-        invitado.sendMessage("§7El jugador §a" + player.getName() + " §7quiere hacerte una apuesta por §a" + money + "§7.");
-        invitado.sendMessage("");
-        invitado.spigot().sendMessage(texto_final);
-        invitado.sendMessage("");
-        invitado.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
+        target.playSound(target.getLocation(), Sound.ORB_PICKUP, 1.0f, 1.0f);
+        player.sendMessage(String.format(MessageManager.getMessage(Message.INVITATION_SENT), target.getName(), betAmount));
+        target.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
+        target.sendMessage("");
+        target.sendMessage(String.format(MessageManager.getMessage(Message.INVITATION_RECEIVED), player.getName(), betAmount));
+        target.sendMessage("");
+        target.spigot().sendMessage(finalText);
+        target.sendMessage("");
+        target.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
     }
 }
-

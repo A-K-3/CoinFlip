@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>CoinFlipGMIP</name>
+    <name>Coinflip</name>
 
     <description>Cara o Cruz</description>
     <properties>
@@ -40,6 +40,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <finalName>${project.name}</finalName>
                         </configuration>
                     </execution>
                 </executions>

@@ -1,96 +1,53 @@
 package gmip.ak.commands;
 
 import gmip.ak.CoinFlip;
-import gmip.ak.Prefix;
-import gmip.ak.coinflip.CreateCoinflip;
-import gmip.ak.coinflip.PlayerInvitation;
+import gmip.ak.Message;
+import gmip.ak.MessageManager;
+import gmip.ak.coinflip.InvitationManager;
+import gmip.ak.utils.CommandUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
 public class IgnoreCoinflip {
 
     private final CoinFlip plugin;
+    private final InvitationManager invitationManager;
 
     public IgnoreCoinflip(final CoinFlip plugin) {
         this.plugin = plugin;
+        this.invitationManager = new InvitationManager(plugin);
     }
 
     public void ignoreCoinflip(final CommandSender sender, final String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("§cNo se puede ejecutar por consola.");
+            sender.sendMessage(MessageManager.getMessage(Message.NO_CONSOLE));
             return;
         }
+
         final Player player = (Player) sender;
-        Player sendInvite;
+        Player sendInvite = null;
 
         try {
             sendInvite = Bukkit.getPlayerExact(args[1]);
         } catch (Exception e) {
-            player.sendMessage(Prefix.ERROR.getString() + "Uso: /coinflip ignore [usuario]");
-            return;
+            player.sendMessage(MessageManager.getMessage(Message.USAGE_IGNORE));
         }
 
         if (sendInvite == null) {
-
-            player.sendMessage(Prefix.ERROR.getString() + "El jugador §c" + args[1] + " §7no está conectado.");
+            player.sendMessage(MessageManager.getMessage(Message.PLAYER_NOT_ONLINE));
             return;
         }
 
-        if (plugin.invites.containsKey(player.getUniqueId())) {
-
-            List<PlayerInvitation> invitaciones = plugin.invites.get(player.getUniqueId());
-
-            int i = 0;
-            boolean no_encontrado = true;
-
-            while (i < plugin.invites.size() && no_encontrado) {
-
-                if (invitaciones == null) {
-                    player.sendMessage(Prefix.ERROR.getString() + "¡No tienes invitaciones pendientes!");
-                    return;
-                }
-
-                if (invitaciones.isEmpty()) {
-                    player.sendMessage(Prefix.ERROR.getString() + "¡No tienes invitaciones pendientes!");
-                    return;
-                }
-
-                PlayerInvitation invitacion = invitaciones.get(i);
-
-                if (invitacion.getInvitador().equals(sendInvite.getUniqueId())) {
-                    no_encontrado = false;
-                } else {
-                    i++;
-                }
-            }
-
-            if (no_encontrado) {
-                player.sendMessage(Prefix.ERROR.getString() + "Este jugador no te ha invitado!");
-            } else {
-
-                int money = plugin.invites.get(player.getUniqueId()).get(i).getBet();
-
-                if (plugin.economy.getBalance(player) < money) {
-                    player.sendMessage(Prefix.ERROR.getString() + "No tienes §a" + money + " §7para apostar.");
-                    return;
-                }
-
-                if (plugin.economy.getBalance(sendInvite) < plugin.invites.get(player.getUniqueId()).get(i).getBet()) {
-                    player.sendMessage(Prefix.ERROR.getString() + "§c" + sendInvite.getName() + " §7no tiene §c" + money + " §7para apostar.");
-                    return;
-                }
-
-                sendInvite.sendMessage(Prefix.ERROR.getString() + player.getName() + " ha rechazado tu invitación de apuesta.");
-                plugin.invites.get(player.getUniqueId()).remove(i);
-            }
-
-        } else {
-            player.sendMessage(Prefix.ERROR.getString() + "¡No tienes ninguna invitacion pendiente!");
+        int invitationIndex = CommandUtils.findInvitationIndex(invitationManager, player.getUniqueId(), sendInvite.getUniqueId());
+        if (invitationIndex == -1) {
+            player.sendMessage(MessageManager.getMessage(Message.NO_INVITATION));
+            return;
         }
 
-    }
+        invitationManager.removeInvitation(player.getUniqueId(), invitationIndex);
 
+        player.sendMessage(String.format(MessageManager.getMessage(Message.IGNORED_INVITATION), sendInvite.getName()));
+        sendInvite.sendMessage(String.format(MessageManager.getMessage(Message.IGNORE_INVITATION), player.getName()));
+    }
 }

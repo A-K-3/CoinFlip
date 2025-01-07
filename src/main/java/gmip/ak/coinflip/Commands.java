@@ -24,15 +24,9 @@ public class Commands implements CommandExecutor {
             final String st = args[0];
 
             if (st.equalsIgnoreCase("accept") || st.equalsIgnoreCase("aceptar")) {
-
                 this.plugin.acceptCoinflip.sendAccept(sender, args);
-
-            }
-
-            if (st.equalsIgnoreCase("ignore") || st.equalsIgnoreCase("ignorar")) {
-
+            } else if (st.equalsIgnoreCase("ignore") || st.equalsIgnoreCase("ignorar")) {
                 this.plugin.ignoreCoinflip.ignoreCoinflip(sender, args);
-
             } else if (st.equalsIgnoreCase("about") || st.equalsIgnoreCase("info-plugin") || st.equalsIgnoreCase("plugin")) {
                 sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
                 sender.sendMessage("§aAuthor: §f[Ak.]");
@@ -54,7 +48,7 @@ public class Commands implements CommandExecutor {
         sender.sendMessage("§8⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧⸦⸧");
         final String format = " §f/%s %s §e- %s";
         sender.sendMessage("");
-        sendCenteredMessage.sendCenteredMessage((Player) sender, "&7&lCOINFLIP &2&lG&1&lM&2&lI&1&lP");
+        sendCenteredMessage.sendCenteredMessage((Player) sender, "&7&lCOINFLIP");
         sender.sendMessage("");
         sender.sendMessage(String.format(format, "coinflip", "§a[usuario] [cantidad]", "envías una petición de coinflip."));
         sender.sendMessage(String.format(format, "coinflip", "accept §a[usuario]", "aceptas una petición."));

@@ -29,10 +29,19 @@ public final class CoinFlip extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
 
+        getServer().getLogger().info("\n" +
+                "   __________  _____   __________    ________ \n" +
+                "  / ____/ __ \\/  _/ | / / ____/ /   /  _/ __ \\\n" +
+                " / /   / / / // //  |/ / /_  / /    / // /_/ /\n" +
+                "/ /___/ /_/ // // /|  / __/ / /____/ // ____/ \n" +
+                "\\____/\\____/___/_/ |_/_/   /_____/___/_/      \n" +
+                "                                              \n");
         getServer().getLogger().info("Plugin Coinflip activado correctamente.");
         this.getCommand("coinflip").setExecutor(new Commands(this));
         this.sendCoinflip = new SendCoinflip(this);
         this.acceptCoinflip = new AcceptCoinflip(this);
+        this.ignoreCoinflip = new IgnoreCoinflip(this);
+        saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
         setupEconomy();
     }

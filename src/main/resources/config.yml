@@ -1,0 +1,32 @@
+coinflip:
+  taxes: 1.8
+  min-bet: 1000
+  min-bet-show: 5000
+
+messages:
+  no_console: "§cNo se puede ejecutar por consola."
+  usage_ignore: "Uso: /coinflip ignore [usuario]"
+  no_invitation: "Este jugador no te ha invitado!"
+  ignored_invitation: "Has ignorado la invitación de %s."
+  ignore_invitation: "%s ha ignorado tu invitación."
+  usage_accept: "Uso: /coinflip accept [usuario]"
+  no_pending_invitations: "¡No tienes invitaciones pendientes!"
+  no_balance: "No tienes §a%s §7para apostar."
+  no_balance_other: "§c%s §7no tiene §c%s §7para apostar."
+  coinflip_start: "Comenzando coinflip entre &a%s&7 y &a%s&7 por &a%s&7."
+  coinflip_winner: "El jugador &a%s &7ganó la apuesta contra &a%s &7y consiguió &a%s&7."
+  usage_send: "Uso: /coinflip [usuario] [cantidad]"
+  player_not_online: "El jugador no está en línea."
+  invalid_amount: "La cantidad debe ser un número."
+  accept: "§a§l[ACEPTAR]"
+  reject: "§c§l[RECHAZAR]"
+  min_bet: "La apuesta mínima es de §a%s§7."
+  insufficient_funds: "No tienes suficiente dinero para apostar."
+  send_to_self: "No puedes enviarte una invitación a ti mismo."
+  usage_username: "Uso: /coinflip [comando] [usuario]"
+  invitation_sent: "Has enviado una invitación de coinflip a %s por %s."
+  invitation_received: "%s te ha invitado a un coinflip por %s."
+  countdown_3: "3..."
+  countdown_2: "2..."
+  countdown_1: "1..."
+  countdown_calculating: "Calculando ganador..."

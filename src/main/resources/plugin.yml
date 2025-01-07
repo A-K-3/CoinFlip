@@ -1,4 +1,4 @@
-name: TokenFlipGMIP
+name: Coinflip
 version: ${project.version}
 main: gmip.ak.CoinFlip
 authors: [ Ak ]
